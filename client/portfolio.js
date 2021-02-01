@@ -4,7 +4,6 @@
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
-let myProducts ;
 
 
 // inititiqte selectors
@@ -31,7 +30,6 @@ const sortSelect = document.querySelector('#sort-select')
 const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
   currentPagination = meta;
-  myProducts = [...currentProducts];
 
 };
 
@@ -67,21 +65,69 @@ const fetchProducts = async (page = 1, size = 12) => {
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
+  let i = 0;
   const template = products
     .map(product => {
-      return `
+
+      
+      if(i==0){
+        i+=1;
+        return `
+      <div class="row">
+      <div class="col">
       <div class="product" id=${product.uuid}>
-        <span>${product.brand}</span>
-        <a href="${product.link}" target="_blank">${product.name}</a>
-        <span>${product.price}</span><button onclick="addFavorite(this,'${product.uuid}')">Add Favorite</button>
+      <img class="product-photo" src=${product.photo}><br>
+        <span>${product.brand}</span><br>
+        <a href="${product.link}" target="_blank">${product.name}</a><br>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
       </div>
-    `;
+      </div>`;}
+    else if(i==products.length - 1){
+      i+=1;
+        return `
+      <div class="col">
+      <div class="product" id=${product.uuid}>
+        <img class="product-photo" src=${product.photo}><br>
+        <span>${product.brand}</span><br>
+        <a href="${product.link}" target="_blank">${product.name}</a><br>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
+      </div>
+      </div>`;
+    }
+    else if(i%3 != 0){
+      i+=1;
+        return `
+      <div class="col">
+      <div class="product" id=${product.uuid}>
+      <img class="product-photo" src=${product.photo}><br>
+        <span>${product.brand}</span><br>
+        <a href="${product.link}" target="_blank">${product.name}</a><br>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
+      </div>
+      </div>`;
+    }
+    else{
+      i+=1;
+        return `
+        </div>
+        <div class="row">
+      <div class="col">
+      <div class="product" id=${product.uuid}>
+      <img class="product-photo" src=${product.photo}><br>
+        <span>${product.brand}</span><br>
+        <a href="${product.link}" target="_blank">${product.name}</a><br>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
+      </div>
+      </div>`;
+    }
+      
+      
     })
     .join('');
 
   div.innerHTML = template;
   fragment.appendChild(div);
-  sectionProducts.innerHTML = '<h2>Products</h2>';
+  sectionProducts.innerHTML = '<h2>What you asked for 💅🏽</h2>';
   sectionProducts.appendChild(fragment);
 };
 
@@ -104,24 +150,30 @@ const renderPagination = pagination => {
  * Render page selector
  * @param  {Object} pagination
  */
-const renderIndicators = pagination => {
+const renderIndicators = (pagination,products) => {
   const {count} = pagination;
 
-  spanNbProducts.innerHTML = currentProducts.length;
-  spanNbNewProducts.innerHTML = currentProducts.filter(product => filterBy_released(product)).length;
-  spanP50.innerHTML = percentile(currentProducts,0.5);
-  spanP90.innerHTML = percentile(currentProducts,0.9);
-  spanP95.innerHTML = percentile(currentProducts,0.95);
-  lastReleased.innerHTML = sortby_date(currentProducts,false)[0].released;
+  spanNbProducts.innerHTML = products.length;
+  spanNbNewProducts.innerHTML = products.filter(product => filterBy_released(product)).length;
+  spanP50.innerHTML = percentile(products,0.5);
+  spanP90.innerHTML = percentile(products,0.9);
+  spanP95.innerHTML = percentile(products,0.95);
+  lastReleased.innerHTML = sortby_date(products,false)[0].released;
 
 };
 
 const render = (products, pagination) => {
-  renderProducts(productsToShow(products,filters,sorts));
+  renderProducts(products);
   renderPagination(pagination);
-  renderIndicators(pagination);
-  renderBrand(productsToShow(products,filters,sorts));
+  renderIndicators(pagination,products);
+  renderBrand(products);
 };
+
+const renderFilter = (products,pagination) => {
+  renderProducts(products);
+  renderIndicators(pagination,products);
+  console.log(products);
+}
 
 /**
  * Declaration of all Listeners
@@ -135,13 +187,13 @@ const render = (products, pagination) => {
 selectShow.addEventListener('change', event => {
   fetchProducts(currentPagination.currentPage, parseInt(event.target.value))
     .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
+    .then(() => render(productsToShow(currentProducts,filters,sorts), currentPagination));
 });
 
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
     .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination))
+    .then(() => render(productsToShow(currentProducts,filters,sorts), currentPagination))
 );
 
 
@@ -152,7 +204,7 @@ Browse available pages
 selectPage.addEventListener('change', event => {
   fetchProducts(parseInt(event.target.value), parseInt(selectShow.value))
     .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
+    .then(() => render(productsToShow(currentProducts,filters,sorts), currentPagination));
 });
 
 
@@ -165,7 +217,7 @@ function filterBy_released(obj) {
   let diff;
   date = Date.parse(obj.released);
   diff = Math.trunc((Date.now() - date) / (1000 * 3600 * 24)); 
-  if(diff>2*7){
+  if(diff<2*7){
     return true;
   }
   else{
@@ -255,7 +307,7 @@ const renderBrand = products => {
 selectBrand.addEventListener('change', event => {
   filters.brand = event.target.value;
   console.log(applyFilters(currentProducts,filters));
-  renderProducts(productsToShow(currentProducts,filters,sorts));
+  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
 });
 
 /* 
@@ -264,7 +316,7 @@ selectBrand.addEventListener('change', event => {
 
 filterReleased.addEventListener('change', event => {
   filters.recentProducts = !filters.recentProducts;
-  renderProducts(productsToShow(currentProducts,filters,sorts));
+  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
 });
 
 
@@ -276,7 +328,7 @@ filterReleased.addEventListener('change', event => {
 
 filterPrice.addEventListener('change', event => {
   filters.reasonablePrice = !filters.reasonablePrice;
-  renderProducts(productsToShow(currentProducts,filters,sorts));
+  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
 });
 
 
@@ -316,7 +368,7 @@ function sortby_date(list,desc){
 
 sortSelect.addEventListener('change', event => {
   sorts = event.target.value;
-  renderProducts(productsToShow(currentProducts,filters,sorts));
+  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
 
 });
 
@@ -349,7 +401,6 @@ function percentile(products,n){
 const favorite = new Set();
 
 function addFavorite(elmt,id){
-  
   if (favorite.has(id)){
     favorite.delete(id);
     renderProducts(productsToShow(currentProducts,filters,sorts));
@@ -358,6 +409,7 @@ function addFavorite(elmt,id){
       favorite.add(id);
 
   } 
+  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
   
 }
 
@@ -367,5 +419,5 @@ function addFavorite(elmt,id){
 
  filterFav.addEventListener('change', event => {
   filters.favorite = !filters.favorite;
-  renderProducts(productsToShow(currentProducts,filters,sorts));
+  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
 });

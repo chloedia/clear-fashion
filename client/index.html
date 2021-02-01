@@ -1,58 +1,96 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>👕 Clear Fahion | Environmentally & human-friendly clothes</title>
-  </head>
-  <body>
-    <h1>Clear fashion</h1>
-    <section id="options">
-      <div id="show">
-        <label for="show-select">Show:</label>
-        <select name="show" id="show-select">
-          <option value="12">12</option>
-          <option value="24">24</option>
-          <option value="48">48</option>
-        </select>
-      </div>
-      <div id="page">
-        <label for="page-select">Go to page:</label>
-        <select name="page" id="page-select"> </select>
-      </div>
-      <div id="filters">
-        <input type="checkbox" name="filtre1" id= "check-filterBy-Price" value="0">
-        <span>By reasonable price</span>
-      </input>
-      <input type="checkbox" name="filtre2" id="check-filterBy-Released" value="0">
-        <span>By recently released</span>
-    </input>
-    <input type="checkbox" name="filtre3" id="check-filterBy-Fav" value="0">
-        <span>By favorite</span>
-    </input>
-        <div id="brand">
-          <label for="brand-select">By brands:</label>
-          <select name="brand" id="brand-select"> </select>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>👕 Clear Fahion | Environmentally & human-friendly clothes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="head">
+    <section>
+      <h1>Clear fashion</h1>
+      <h2>Let's buy ethical 🌱</h2>
+
+
+      <div class="row">
+        <div class="col-sm">
+          <div id="show">
+            <label for="show-select">Show:</label>
+            <select name="show" id="show-select">
+              <option value="12">12</option>
+              <option value="24">24</option>
+              <option value="48">48</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div id="sort">
-        <label for="sort-select">Sort:</label>
-        <select name="sort" id="sort-select">
-          <option value="price-asc" >Cheaper</option>
-          <option value="price-desc" >Expensive</option>
-          <option value="date-asc"  >Recently released</option>
-          <option value="date-desc">Anciently released</option>
-        </select>
+        <div class="col-sm">
+          <div id="page">
+            <label for="page-select">Go to page:</label>
+            <select name="page" id="page-select"> </select>
+          </div>
+        </div>
+
       </div>
     </section>
-    <section id="indicators">
-      <h2>Indicators</h2>
-      <div>
-        <span>Number of products</span>
-        <span id="nbProducts">0</span>
+    <section id="options">
+
+      <div id="filters">
+
+        <div class="row">
+          <div class="col-sm">
+            <input type="checkbox" name="filtre1" id="check-filterBy-Price" value="0">
+            <span>Cheap products 😬 </span>
+            </input>
+          </div>
+          <div class="col-sm">
+            <input type="checkbox" name="filtre2" id="check-filterBy-Released" value="0">
+            <span>Fresh Products 👀</span>
+            </input>
+          </div>
+          <div class="col-sm">
+            <input type="checkbox" name="filtre3" id="check-filterBy-Fav" value="0">
+            <span>All my Fav' ❤️</span>
+            </input>
+          </div>
+        </div>
+        <div class="row">
+          <div id="brand">
+            <label for="brand-select">Choose your brand 🥸 </label>
+            <select name="brand" id="brand-select"> </select>
+          </div>
+        </div>
+
       </div>
-      <div>
-        <span>Number of new products</span>
-        <span id="nbNewProducts">0</span>
+      <div class="row">
+        <div id="sort">
+          <label for="sort-select">Sort:</label>
+          <select name="sort" id="sort-select">
+            <option value="price-asc">Cheaper</option>
+            <option value="price-desc">Expensive</option>
+            <option value="date-asc">Recently released</option>
+            <option value="date-desc">Anciently released</option>
+          </select>
+        </div>
+      </div>
+
+    </section>
+
+
+    <section id="indicators">
+      <h2>First some indicators 🤓</h2>
+      <div class="row">
+        <div>
+          <span>Number of products</span>
+          <span id="nbProducts">0</span>
+        </div>
+        <div>
+          <span>Number of new products</span>
+          <span id="nbNewProducts">0</span>
+        </div>
       </div>
       <div>
         <span>p50 price value</span>
@@ -71,7 +109,9 @@
         <span id="lastReleased">2020-01-01</span>
       </div>
     </section>
-    <section id="products"></section>
-    <script type="text/javascript" charset="UTF-8" src="portfolio.js"></script>
-  </body>
+  </div>
+  <section id="products"></section>
+  <script type="text/javascript" charset="UTF-8" src="portfolio.js"></script>
+</body>
+
 </html>
