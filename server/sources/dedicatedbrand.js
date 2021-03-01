@@ -1,11 +1,42 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const uuidv5 = require("uuidv5");
+const fetch = require("node-fetch");
 
 /**
  * Parse webpage e-shop
  * @param  {String} data - html response
  * @return {Array} products
  */
+
+const fetchProducts = (data) => {
+    console.log("PIF");
+    let all_products = [];
+    data.forEach((x) => {
+      if(x!=undefined && x.length!=0){
+        all_products.push( {
+          'uuid' : x.uid,
+          'name' : x.name,
+          'price' : x.price.priceAsNumber,
+          'photo' : x.image[0],
+          'link' : x.canonicalUri
+        });
+      }
+    })
+    return all_products;
+  
+};
+
+const checker = data =>{
+  const $ = cheerio.load(data);
+  return $('.mainNavigation-fixedContainer .mainNavigation-link-subMenu .mainNavigation-link-subMenu-link.mainNavigation-link-subMenu-link--image')
+  .map((i,element) => {
+    const url = "https://www.dedicatedbrand.com" + $(element)
+    .find('a').attr('href');
+    return url;
+  }).get();
+}
+
 const parse = data => {
   const $ = cheerio.load(data);
 
@@ -19,10 +50,21 @@ const parse = data => {
       const price = parseInt(
         $(element)
           .find('.productList-price')
-          .text()
-      );
+          .text());
+      const photo = $(element)
+      .find('.productList-image img')
+      .attr('src');
 
-      return {name, price};
+
+      const link= "https://www.dedicatedbrand.com" + $(element)
+      .find('.productList-link')
+      .attr('href');
+      const id = uuidv5('url', link);
+      const brand = 'dedicated';
+      //const complet_link = "https://www.dedicatedbrand.com"+link;
+      
+
+      return {name, price,photo,id,link,brand};
     })
     .get();
 };
@@ -43,4 +85,27 @@ module.exports.scrape = async url => {
   console.error(status);
 
   return null;
+};
+
+module.exports.getAllURLs = async url => {
+  const response = await axios(url);
+  const {data, status} = response;
+
+  if (status >= 200 && status < 300) {
+    return checker(data);
+  }
+
+  console.error(status);
+
+  return null;
+};
+
+module.exports.fetchProducts = async url => {
+  const response = await axios ({
+    url: "https://www.dedicatedbrand.com/en/loadfilter",
+    method: "GET"
+  })
+  const products = response.data.products;
+  const all_p = fetchProducts(products);
+  return all_p;
 };
