@@ -1,12 +1,16 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+<<<<<<< HEAD
 const uuidv5 = require("uuidv5");
 const fetch = require("node-fetch");
+=======
+const {'v5': uuidv5} = require('uuid');
+>>>>>>> 9b0501dc9bcbc7b9d8d38206356abe802f106ae9
 
 /**
- * Parse webpage e-shop
+ * Parse webpage restaurant
  * @param  {String} data - html response
- * @return {Array} products
+ * @return {Object} restaurant
  */
 
 const fetchProducts = (data) => {
@@ -47,6 +51,7 @@ const parse = data => {
 
   return $('.productList-container .productList')
     .map((i, element) => {
+<<<<<<< HEAD
       const name = $(element)
         .find('.productList-title')
         .text()
@@ -70,15 +75,34 @@ const parse = data => {
       
 
       return {name, price,photo,id,link,brand};
+=======
+      const link = `https://www.dedicatedbrand.com${$(element)
+        .find('.productList-link')
+        .attr('href')}`;
+
+      return {
+        link,
+        'brand': 'dedicated',
+        'price': parseInt(
+          $(element)
+            .find('.productList-price')
+            .text()
+        ),
+        'name': $(element)
+          .find('.productList-title')
+          .text()
+          .trim()
+          .replace(/\s/g, ' '),
+        'photo': $(element)
+          .find('.productList-image img')
+          .attr('src'),
+        '_id': uuidv5(link, uuidv5.URL)
+      };
+>>>>>>> 9b0501dc9bcbc7b9d8d38206356abe802f106ae9
     })
     .get();
 };
 
-/**
- * Scrape all the products for a given url page
- * @param  {[type]}  url
- * @return {Array|null}
- */
 module.exports.scrape = async url => {
   const response = await axios(url);
   const {data, status} = response;
