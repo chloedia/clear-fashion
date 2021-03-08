@@ -2,6 +2,11 @@
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const adressebrand = require('./sources/adressebrand');
 const mudjeanbrand= require('./sources/mudjeansbrand.js');
+const { MongoClient } = require("mongodb");
+
+const MONGODB_URI =
+  "mongodb+srv://dbChloe:cB6lKJEFbiqz2wpk@clearfashion.3knaz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const MONGODB_DB_NAME = 'clearFashion'
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -12,28 +17,30 @@ async function asyncForEach(array, callback) {
 async function tryFetch(){
   dedicatedbrand.fetchProducts().then(ob => console.log(ob));
 }
+
+function checkDoubles(myArray){
+  all_unique_Ids = [];
+  myFilteredArray = [];
+  myArray.forEach(x => {
+    if(all_unique_Ids.includes(x.uuid)==false){
+      all_unique_Ids.push(x.uuid);
+      myFilteredArray.push(x);
+    }
+
+  })
+  console.log(myFilteredArray.length)
+  return myFilteredArray;
+}
+
 async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#page=6',eshop2='https://adresse.paris/640-e-shop?id_category=640&n=134',eshop3='https://mudjeans.eu/collections/') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop1} source`);
-
-    //const products = await dedicatedbrand.scrape(eshop);
-    let urls = await dedicatedbrand.getAllURLs(eshop1);
-    //console.log(products);
-    urls = urls.slice(0,-4);
-    console.log(urls);
     var products=[];
     console.log("Looking for the products 🕵️‍♀️")
+    dedicatedbrand.fetchProducts().then(ob => products = products.concat(ob));
 
-    await asyncForEach(urls, async (url) => {
-      //await waitFor(50);
-      if(!url.includes("news") && !url.includes("sale")){
-        let newproducts = await dedicatedbrand.scrape(url+"#page=10");
-        console.log("New products from "+url+" //COUNT : "+newproducts.length)
-        products = products.concat(newproducts);
-      }
-      
-      
-    });
+    //We check for Repetitions (double products)
+
     console.log(`🕵️‍♀️  browsing ${eshop2} source`);
     newproducts = await adressebrand.scrape(eshop2);
     console.log(newproducts.length)
@@ -50,61 +57,65 @@ async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#pa
       products = products.concat(newproducts);  
     });
 
-    console.log(products);
-    console.log("nb of product = "+products.length);
-    console.log('done');
-    process.exit(0);
-  } catch (e) {
-    console.error(e);
-    process.exit(1);
-  }
-}
-
-async function sandbox2 (eshop = 'https://adresse.paris/640-e-shop?id_category=640&n=134') {
-  try {
-    console.log(`🕵️‍♀️  browsing ${eshop} source`);
-
-    const products = await adressebrand.scrape(eshop);
-
-    console.log(products);
-    console.log("nbProduct : "+products.length)
-    console.log('done');
-    process.exit(0);
-  } catch (e) {
-    console.error(e);
-    process.exit(1);
-  }
-}
-
-async function sandbox3 (eshop = 'https://mudjeans.eu/collections/') {
-  try {
-    mudjeans_urls = ["men","women-jeans"]
-    console.log(`🕵️‍♀️  browsing ${eshop} source`);
-
-    console.log("Looking for the products 🕵️‍♀️");
-    var products=[];
-
-    await asyncForEach(mudjeans_urls, async (url) => {
-      //await waitFor(50);
+    console.log("nb of product before checking doubles = "+products.length);
+    products = checkDoubles(products);
+    console.log("nb of product after checking doubles = "+products.length);
     
-      let newproducts = await mudjeanbrand.scrape(eshop+url);
-      console.log("New products from "+eshop+url+url+" //COUNT : "+newproducts.length)
-      products = products.concat(newproducts);  
-    });
+    //Connect the mongodb
+    const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true,'useUnifiedTopology': true});
+    const db =  client.db(MONGODB_DB_NAME)
 
-    console.log(products);
-    console.log(products.length)
+    //We insert in the mongodb
+    const collection = db.collection('products');
+    const result = await collection.insertMany(products);
+    
+    console.log(result);
     console.log('done');
     process.exit(0);
   } catch (e) {
     console.error(e);
     process.exit(1);
- }
+  }
+}
+
+async function askQueries(){
+  console.log("Okay, lets go! ");
+  const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true,'useUnifiedTopology': true});
+  const db =  client.db(MONGODB_DB_NAME)
+  const collection = db.collection('products');
+
+  //Find all products related to a certain brand
+  console.log("Finding all the products of adresse ... ");
+  const brand = "adresse";
+  const products1 = await collection.find({brand}).toArray();
+
+  //console.log(products1);
+
+  //Find all products less than 100€
+  console.log("Finding all the products costing less than 100€ ... ");
+  const products2 = await collection.find({price : { $lt: 100 }}).toArray();
+
+  //console.log(products2);
+
+  //Find all products sorted by price
+  console.log("Finding all the products sorted by price ... ");
+  const products3 = await collection.aggregate([
+    { $sort : { price : 1 } }
+  ]).toArray();
+  
+  //console.log(products3);
+
+  //Find all products  of a certain category
+  console.log("Finding all the products of a category ... ");
+  const products4 = await collection.find({category : "Women"}).toArray();
+  console.log(products4);
+
+
+
+
 }
 
 const [,, eshop1,eshop2,eshop3] = process.argv;
 
 //sandbox1(eshop1,eshop2,eshop3);
-//sandbox2(eshop);
-//sandbox3();
-tryFetch();
+askQueries();

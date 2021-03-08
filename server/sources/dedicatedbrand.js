@@ -12,15 +12,20 @@ const fetch = require("node-fetch");
 const fetchProducts = (data) => {
     console.log("PIF");
     let all_products = [];
+    let all_ids = [];
     data.forEach((x) => {
-      if(x!=undefined && x.length!=0){
+      if(x!=undefined && x.length!=0 && !all_ids.includes(x.uid)){
         all_products.push( {
-          'uuid' : x.uid,
           'name' : x.name,
           'price' : x.price.priceAsNumber,
           'photo' : x.image[0],
-          'link' : x.canonicalUri
+          'link' : "https://www.dedicatedbrand.com/"+x.canonicalUri,
+          'uuid' : uuidv5('url', x.name),
+          'brand':"dedicated",
+          'category': (x.canonicalUri.includes("women")?"Women":x.canonicalUri.includes("men")?"Men":"Other")
+          
         });
+        all_ids.push(x.uid);
       }
     })
     return all_products;

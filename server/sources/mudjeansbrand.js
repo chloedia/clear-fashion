@@ -21,15 +21,21 @@ const parse = data => {
           .find('.product-price')
           .text().split('€')[1].split('\n')[0]);
 
-      const photo = $(element)
+      const photo = "https:" + $(element)
         .find('.primary-image img').attr('src');
       const link = "https://mudjeans.eu" + $(element)
       .find('.product-title a').attr('href');
-      const id = uuidv5('url', link);
+      const uuid = uuidv5('url', name);
 
       const brand = 'mudjeans';
 
-      return {name, price,photo,link,brand,id};
+      const category =  (link.includes("women")?"Women":link.includes("men")?"Men":"Other");
+      return {name, price,photo,link,brand,uuid,category};
+
+
+      
+
+      
     })
     .get();
 };
