@@ -2,9 +2,16 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const fs = require('fs');
 
+<<<<<<< HEAD
 const MONGODB_DB_NAME = 'clearFashion';
 const MONGODB_COLLECTION = 'products';
 const MONGODB_URI = process.env.MONGODB_URI
+=======
+const MONGODB_DB_NAME = 'clearfashion';
+const MONGODB_COLLECTION = 'products';
+const MONGODB_URI = process.env.MONGODB_URI;
+
+>>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
 let client = null;
 let database = null;
 
@@ -15,6 +22,10 @@ let database = null;
 const getDB = module.exports.getDB = async () => {
   try {
     if (database) {
+<<<<<<< HEAD
+=======
+      console.log('💽  Already Connected');
+>>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
       return database;
     }
 
@@ -71,6 +82,7 @@ module.exports.find = async query => {
   }
 };
 
+<<<<<<< HEAD
 module.exports.findLimit = async (query,limit) => {
   try {
     const db = await getDB();
@@ -87,6 +99,8 @@ module.exports.findLimit = async (query,limit) => {
 
 
 
+=======
+>>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
 /**
  * Close the connection
  */

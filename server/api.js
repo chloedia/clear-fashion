@@ -21,10 +21,10 @@ app.get('/products/search', async (req, response) => {
   response.send(res);
 });
 
-/*app.get('/products/:id', (req, response) => {
+app.get('/products/:id', (req, response) => {
   console.log("was requested 2");
   db.find({'_id': req.params.id}).then(res => response.send(res));
-});*/
+});
 
 app.listen(PORT);
 console.log(`📡 Running on port ${PORT}`);
