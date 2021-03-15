@@ -32,7 +32,8 @@ const parse = data => {
         'photo': $(element)
           .find('noscript img.product_card__image')
           .attr('src'),
-        '_id': uuidv5(link, uuidv5.URL)
+        '_id': uuidv5(link, uuidv5.URL),
+        'category': "Men"
       };
     })
     .get();

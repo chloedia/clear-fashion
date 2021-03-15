@@ -2,6 +2,7 @@
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const adressebrand = require('./sources/adressebrand');
 const mudjeanbrand= require('./sources/mudjeansbrand.js');
+const loom = require('./sources/loom');
 const { MongoClient } = require("mongodb");
 
 const MONGODB_URI =
@@ -26,7 +27,6 @@ function checkDoubles(myArray){
       all_unique_Ids.push(x.uuid);
       myFilteredArray.push(x);
     }
-
   })
   console.log(myFilteredArray.length)
   return myFilteredArray;
@@ -38,6 +38,24 @@ async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#pa
     var products=[];
     console.log("Looking for the products 🕵️‍♀️")
     dedicatedbrand.fetchProducts().then(ob => products = products.concat(ob));
+
+    pages = [
+      'https://www.loom.fr/collections/hauts',
+      'https://www.loom.fr/collections/bas'
+    ];
+
+    console.log('\n');
+
+    console.log(`🕵️‍♀️  browsing loom page with Promise.all`);
+
+    const promises = pages.map(loom.scrape);
+    const results = await Promise.all(promises);
+
+    console.log(`👕 ${results.length} results of promises found`);
+    console.log(`👕 ${results.flat().length} products found`);
+
+    products.push(results.flat());
+    products = products.flat();
 
     //We check for Repetitions (double products)
 
@@ -58,7 +76,7 @@ async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#pa
     });
 
     console.log("nb of product before checking doubles = "+products.length);
-    products = checkDoubles(products);
+    //products = checkDoubles(products);
     console.log("nb of product after checking doubles = "+products.length);
     
     //Connect the mongodb
@@ -67,7 +85,7 @@ async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#pa
 
     //We insert in the mongodb
     const collection = db.collection('products');
-    const result = await collection.insertMany(products);
+    const result = await collection.insertMany(products,{'ordered': false});
     
     console.log(result);
     console.log('done');
@@ -117,5 +135,5 @@ async function askQueries(){
 
 const [,, eshop1,eshop2,eshop3] = process.argv;
 
-//sandbox1(eshop1,eshop2,eshop3);
-askQueries();
+sandbox1(eshop1,eshop2,eshop3);
+//askQueries();

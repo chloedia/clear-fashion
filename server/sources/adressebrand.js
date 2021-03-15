@@ -27,11 +27,11 @@ const parse = data => {
       const link = $(element)
         .find('.product-name')
         .attr('href');
-      const uuid = uuidv5('url', name);
+      const _id = uuidv5('url', name);
       const brand = 'adresse';
       const category = 'Men';
 
-      return {name, price,photo,uuid,link,brand,category};
+      return {name, price,photo,_id,link,brand,category};
     })
     .get();
 };

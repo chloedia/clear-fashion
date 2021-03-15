@@ -25,12 +25,12 @@ const parse = data => {
         .find('.primary-image img').attr('src');
       const link = "https://mudjeans.eu" + $(element)
       .find('.product-title a').attr('href');
-      const uuid = uuidv5('url', name);
+      const _id = uuidv5('url', name);
 
       const brand = 'mudjeans';
 
       const category =  (link.includes("women")?"Women":link.includes("men")?"Men":"Other");
-      return {name, price,photo,link,brand,uuid,category};
+      return {name, price,photo,link,brand,_id,category};
 
 
       

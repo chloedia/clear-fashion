@@ -2,10 +2,9 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const fs = require('fs');
 
-const MONGODB_DB_NAME = 'clearfashion';
+const MONGODB_DB_NAME = 'clearFashion';
 const MONGODB_COLLECTION = 'products';
-const MONGODB_URI = process.env.MONGODB_URI;
-
+const MONGODB_URI = process.env.MONGODB_URI
 let client = null;
 let database = null;
 
@@ -71,6 +70,22 @@ module.exports.find = async query => {
     return null;
   }
 };
+
+module.exports.findLimit = async (query,limit) => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const result = await collection.find(query).limit(limit).toArray();
+    //{$and : [{'brand': req.query.brand },{'price':{ $lt: parseInt(req.query.price)} }]}
+    return result;
+  } catch (error) {
+    console.error('🚨 collection.find...', error);
+    return null;
+  }
+};
+
+
+
 
 /**
  * Close the connection

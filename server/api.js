@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
+const db = require('./db');
 
 const PORT = 8092;
 
@@ -14,9 +15,16 @@ app.use(helmet());
 
 app.options('*', cors());
 
-app.get('/', (request, response) => {
-  response.send({'ack': true});
+
+app.get('/products/search', async (req, response) => {
+  let res = await db.findLimit({$and : [{'brand': req.query.brand },{'price':{ $lt: parseInt(req.query.price)} }]},parseInt(req.query.limit));
+  response.send(res);
 });
+
+/*app.get('/products/:id', (req, response) => {
+  console.log("was requested 2");
+  db.find({'_id': req.params.id}).then(res => response.send(res));
+});*/
 
 app.listen(PORT);
 console.log(`📡 Running on port ${PORT}`);

@@ -1,11 +1,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-<<<<<<< HEAD
-const uuidv5 = require("uuidv5");
+//const uuidv5 = require("uuidv5");
 const fetch = require("node-fetch");
-=======
 const {'v5': uuidv5} = require('uuid');
->>>>>>> 9b0501dc9bcbc7b9d8d38206356abe802f106ae9
 
 /**
  * Parse webpage restaurant
@@ -24,12 +21,12 @@ const fetchProducts = (data) => {
           'price' : x.price.priceAsNumber,
           'photo' : x.image[0],
           'link' : "https://www.dedicatedbrand.com/"+x.canonicalUri,
-          'uuid' : uuidv5('url', x.name),
+          '_id' : uuidv5(x.name, uuidv5.URL),
           'brand':"dedicated",
           'category': (x.canonicalUri.includes("women")?"Women":x.canonicalUri.includes("men")?"Men":"Other")
           
         });
-        all_ids.push(x.uid);
+        all_ids.push(x._id);
       }
     })
     return all_products;
@@ -51,31 +48,6 @@ const parse = data => {
 
   return $('.productList-container .productList')
     .map((i, element) => {
-<<<<<<< HEAD
-      const name = $(element)
-        .find('.productList-title')
-        .text()
-        .trim()
-        .replace(/\s/g, ' ');
-      const price = parseInt(
-        $(element)
-          .find('.productList-price')
-          .text());
-      const photo = $(element)
-      .find('.productList-image img')
-      .attr('src');
-
-
-      const link= "https://www.dedicatedbrand.com" + $(element)
-      .find('.productList-link')
-      .attr('href');
-      const id = uuidv5('url', link);
-      const brand = 'dedicated';
-      //const complet_link = "https://www.dedicatedbrand.com"+link;
-      
-
-      return {name, price,photo,id,link,brand};
-=======
       const link = `https://www.dedicatedbrand.com${$(element)
         .find('.productList-link')
         .attr('href')}`;
@@ -98,7 +70,6 @@ const parse = data => {
           .attr('src'),
         '_id': uuidv5(link, uuidv5.URL)
       };
->>>>>>> 9b0501dc9bcbc7b9d8d38206356abe802f106ae9
     })
     .get();
 };
