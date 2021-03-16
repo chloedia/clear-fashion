@@ -34,7 +34,7 @@ const parse = data => {
           .attr('src'),
         '_id': uuidv5(link, uuidv5.URL),
         'category': "Men",
-        'released' : (new Date).toLocaleDateString()
+        'released' : (new Date).toLocaleDateString('en-US')
       };
     })
     .get();

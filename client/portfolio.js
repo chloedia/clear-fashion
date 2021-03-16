@@ -51,14 +51,11 @@ const fetchProducts = async (page = 1, size = 12) => {
 
     const body = await response.json();
 
-    /*if (body.success !== true) {
+    if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
-    }*/
-
-    //return body.data;
-    console.log(body.data);
-    return body;
+    }
+    return body.data;
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
