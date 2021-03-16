@@ -85,6 +85,13 @@ module.exports.findLimit = async (query,limit) => {
   }
 };
 
+module.exports.getMeta = async(page, size) => {
+  const db = await getDB();
+  const collection = db.collection(MONGODB_COLLECTION);
+  const count = await collection.count();
+  const pageCount = parseInt(count/size);
+  return {"currentPage" : page,"pageCount":pageCount,"pageSize":size,"count":count} 
+}
 module.exports.findPage = async (page,size) => {
   try {
     const db = await getDB();

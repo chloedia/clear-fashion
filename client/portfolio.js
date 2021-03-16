@@ -28,8 +28,11 @@ const sortSelect = document.querySelector('#sort-select')
  * @param {Object} meta - pagination meta info
  */
 const setCurrentProducts = ({result, meta}) => {
+  console.log("We set new current product")
+  console.log(result);
   currentProducts = result;
   currentPagination = meta;
+  
 
 };
 
@@ -42,16 +45,20 @@ const setCurrentProducts = ({result, meta}) => {
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
+      `https://clear-fashion-livid.vercel.app?page=${page}&size=${size}`
+      //`https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
     );
+
     const body = await response.json();
 
-    if (body.success !== true) {
+    /*if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
-    }
+    }*/
 
-    return body.data;
+    //return body.data;
+    console.log(body.data);
+    return body;
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
@@ -75,22 +82,22 @@ const renderProducts = products => {
         return `
       <div class="row">
       <div class="col">
-      <div class="product" id=${product.uuid}>
+      <div class="product" id=${product._id}>
       <img class="product-photo" src=${product.photo}><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite.has(product._id)?'UnFav\'':'Fav\''}</button>
       </div>
       </div>`;}
     else if(i==products.length - 1){
       i+=1;
         return `
       <div class="col">
-      <div class="product" id=${product.uuid}>
+      <div class="product" id=${product._id}>
         <img class="product-photo" src=${product.photo}><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite.has(product._id)?'UnFav\'':'Fav\''}</button>
       </div>
       </div>`;
     }
@@ -98,11 +105,11 @@ const renderProducts = products => {
       i+=1;
         return `
       <div class="col">
-      <div class="product" id=${product.uuid}>
+      <div class="product" id=${product._id}>
       <img class="product-photo" src=${product.photo}><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite.has(product._id)?'UnFav\'':'Fav\''}</button>
       </div>
       </div>`;
     }
@@ -112,11 +119,11 @@ const renderProducts = products => {
         </div>
         <div class="row">
       <div class="col">
-      <div class="product" id=${product.uuid}>
+      <div class="product" id=${product._id}>
       <img class="product-photo" src=${product.photo}><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product.uuid}')">${favorite.has(product.uuid)?'UnFav\'':'Fav\''}</button>
+        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite.has(product._id)?'UnFav\'':'Fav\''}</button>
       </div>
       </div>`;
     }
@@ -241,7 +248,7 @@ function applyFilters(products,filters){
   .filter(product => filters.brand == "all" || product.brand == filters.brand)
   .filter(product => !filters.reasonablePrice || product.price < 50)
   .filter(product => !filters.recentProducts || filterBy_released(product))
-  .filter(product => !filters.favorite || favorite.has(product.uuid));
+  .filter(product => !filters.favorite || favorite.has(product._id));
 
   
   

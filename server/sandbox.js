@@ -32,7 +32,7 @@ function checkDoubles(myArray){
   return myFilteredArray;
 }
 
-async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#page=6',eshop2='https://adresse.paris/640-e-shop?id_category=640&n=134',eshop3='https://mudjeans.eu/collections/') {
+async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#page=6',eshop2='https://adresse.paris/640-e-shop?id_category=640&n=168',eshop3='https://mudjeans.eu/collections/') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop1} source`);
     var products=[];

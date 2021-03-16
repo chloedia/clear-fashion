@@ -24,7 +24,7 @@ const fetchProducts = (data) => {
           '_id' : uuidv5(x.name, uuidv5.URL),
           'brand':"dedicated",
           'category': (x.canonicalUri.includes("women")?"Women":x.canonicalUri.includes("men")?"Men":"Other"),
-          'date' : (new Date).toLocaleDateString()
+          'released' : (new Date).toLocaleDateString()
           
         });
         all_ids.push(x._id);

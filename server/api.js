@@ -26,9 +26,21 @@ app.get('/products/:id', (req, response) => {
   db.find({'_id': req.params.id}).then(res => response.send(res));
 });
 
-app.get('', (req, response) => {
+app.get('', async (req, response) => {
   console.log("was requested pagination");
-  db.findPage(parseInt(req.query.page),parseInt(req.query.size)).then(res => response.send(res));
+  let res = await db.findPage(parseInt(req.query.page),parseInt(req.query.size))
+  let meta = await db.getMeta(parseInt(req.query.page),parseInt(req.query.size))
+  let products = {
+    "success" : true,
+    "data" : {
+    "result" : res,
+    //"meta" : {"currentPage":req.query.page,"pageCount":?,"pageSize":res.length,"count":?}
+    "meta": meta
+      }
+
+  }
+  response.send(products);
+  
 });
 
 app.listen(PORT);
