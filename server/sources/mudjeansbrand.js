@@ -30,7 +30,8 @@ const parse = data => {
       const brand = 'mudjeans';
 
       const category =  (link.includes("women")?"Women":link.includes("men")?"Men":"Other");
-      return {name, price,photo,link,brand,_id,category};
+      const date = (new Date).toLocaleDateString();
+      return {name, price,photo,link,brand,_id,category,date};
 
 
       

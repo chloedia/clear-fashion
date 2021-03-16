@@ -26,5 +26,10 @@ app.get('/products/:id', (req, response) => {
   db.find({'_id': req.params.id}).then(res => response.send(res));
 });
 
+app.get('', (req, response) => {
+  console.log("was requested pagination");
+  db.findPage(parseInt(req.query.page),parseInt(req.query.size)).then(res => response.send(res));
+});
+
 app.listen(PORT);
 console.log(`📡 Running on port ${PORT}`);

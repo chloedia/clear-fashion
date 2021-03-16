@@ -6,7 +6,7 @@ const loom = require('./sources/loom');
 const { MongoClient } = require("mongodb");
 
 const MONGODB_URI =
-  "mongodb+srv://dbChloe:cB6lKJEFbiqz2wpk@clearfashion.3knaz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+  "mongodb+srv://dbChloe:2HQelVgssDbLCR2Z@clearfashion.3knaz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const MONGODB_DB_NAME = 'clearFashion'
 
 async function asyncForEach(array, callback) {

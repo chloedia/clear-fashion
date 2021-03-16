@@ -80,7 +80,21 @@ module.exports.findLimit = async (query,limit) => {
     //{$and : [{'brand': req.query.brand },{'price':{ $lt: parseInt(req.query.price)} }]}
     return result;
   } catch (error) {
-    console.error('🚨 collection.find...', error);
+    console.error('🚨 collection.findLimit...', error);
+    return null;
+  }
+};
+
+module.exports.findPage = async (page,size) => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const offset = page ? page * size : 0;
+    const result = await collection.find({}).skip(offset)
+                  .limit(size).toArray(); 
+    return result;
+  } catch (error) {
+    console.error('🚨 collection.findPage...', error);
     return null;
   }
 };

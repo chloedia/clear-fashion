@@ -23,7 +23,8 @@ const fetchProducts = (data) => {
           'link' : "https://www.dedicatedbrand.com/"+x.canonicalUri,
           '_id' : uuidv5(x.name, uuidv5.URL),
           'brand':"dedicated",
-          'category': (x.canonicalUri.includes("women")?"Women":x.canonicalUri.includes("men")?"Men":"Other")
+          'category': (x.canonicalUri.includes("women")?"Women":x.canonicalUri.includes("men")?"Men":"Other"),
+          'date' : (new Date).toLocaleDateString()
           
         });
         all_ids.push(x._id);

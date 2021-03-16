@@ -30,8 +30,9 @@ const parse = data => {
       const _id = uuidv5('url', name);
       const brand = 'adresse';
       const category = 'Men';
+      const date = (new Date).toLocaleDateString();
 
-      return {name, price,photo,_id,link,brand,category};
+      return {name, price,photo,_id,link,brand,category,date};
     })
     .get();
 };
