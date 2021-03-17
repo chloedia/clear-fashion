@@ -17,8 +17,25 @@ app.options('*', cors());
 
 
 app.get('/products/search', async (req, response) => {
-  let res = await db.findLimit({$and : [{'brand': req.query.brand },{'price':{ $lt: parseInt(req.query.price)} }]},parseInt(req.query.limit));
-  response.send(res);
+  let res;
+  let meta;
+  if(req.query.brand){
+    res = await db.findPage(parseInt(req.query.page),parseInt(req.query.size),{'brand': req.query.brand});
+    meta = await db.getMeta(parseInt(req.query.page),parseInt(req.query.size),{'brand': req.query.brand});
+  }
+  else{
+    res = await db.findPage(parseInt(req.query.page),parseInt(req.query.size));
+    meta = await db.getMeta(parseInt(req.query.page),parseInt(req.query.size));
+  }
+  
+  
+  let products = {
+    "success" : true,
+    "data" : {
+    "result" : res,
+    "meta": meta
+      }}
+  response.send(products);
 });
 
 app.get('/products/:id', (req, response) => {

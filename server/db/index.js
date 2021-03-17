@@ -85,20 +85,35 @@ module.exports.findLimit = async (query,limit) => {
   }
 };
 
-module.exports.getMeta = async(page, size) => {
+module.exports.getMeta = async(page, size,query=null ) => {
   const db = await getDB();
   const collection = db.collection(MONGODB_COLLECTION);
-  const count = await collection.count();
+  let count;
+  if (query==null){
+    count = await collection.count();
+  }
+  else{
+    count = await collection.find(query).count();
+  }
+  
   const pageCount = parseInt(count/size);
   return {"currentPage" : page,"pageCount":pageCount,"pageSize":size,"count":count} 
 }
-module.exports.findPage = async (page,size) => {
+
+module.exports.findPage = async (page,size,query=null) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
     const offset = page ? page * size : 0;
-    const result = await collection.find({}).skip(offset)
+    let result;
+    if(query==undefined){
+      result = await collection.find({}).skip(offset)
                   .limit(size).toArray(); 
+    }else{
+      result = await collection.find(query).skip(offset)
+                  .limit(size).toArray(); 
+    }
+    
     return result;
   } catch (error) {
     console.error('🚨 collection.findPage...', error);

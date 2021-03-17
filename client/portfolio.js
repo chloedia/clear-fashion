@@ -69,8 +69,13 @@ const fetchProducts = async (page = 1, size = 12) => {
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
+  let template;
   let i = 0;
-  const template = products
+  if (products.length == 0){
+    template = `<div class="noMatch" style='padding-top: 5%; padding-bottom: 10%;'><img src="https://media.giphy.com/media/xTiTnr0lQObHdzDeWA/giphy.gif"><h2>Seems like we don't have that here 🥴</h2><h3>Come by later, we are always searching for the best products 👷‍♀️</h3></div>`
+  }
+  else{
+  template = products
     .map(product => {
 
       
@@ -128,7 +133,7 @@ const renderProducts = products => {
       
     })
     .join('');
-
+  }
   div.innerHTML = template;
   fragment.appendChild(div);
   sectionProducts.innerHTML = '<h2>What you asked for 💅🏽</h2>';
