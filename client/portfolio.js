@@ -163,7 +163,17 @@ const renderProducts = products => {
   }
   div.innerHTML = template;
   fragment.appendChild(div);
-  sectionProducts.innerHTML = '<h2>What you asked for 💅🏽</h2>';
+  if(filters.brand!='all'){
+    const rating = brands_grades[filters.brand].rating;
+    const overview = brands_grades[filters.brand].overview;
+    sectionProducts.innerHTML = `<h2>What you asked for 💅🏽</h2>
+                                <div class='brand-description'>
+                                      <img src='/img/${filters.brand}.png' style='padding:20px; max-width:400px'>
+                                      <h2>This brand was rated <strong>${overview}</strong> by clear fashion with a total grade of <strong>${rating}</strong> 😎</h2>
+                                </div>`;
+  }else{
+    sectionProducts.innerHTML = `<h2>What you asked for 💅🏽</h2>`;
+  }
   sectionProducts.appendChild(fragment);
 };
 
@@ -486,3 +496,25 @@ async function addFavorite(elmt,id){
     .then(setCurrentProducts)
     .then(() => renderFilter(productsToShow(currentProducts,filters,sorts), currentPagination));
 });
+
+const brands_grades = {
+  "dedicated":{
+  "brand": "DEDICATED",
+  "overview": "excellent",
+  "rating": 85.5
+},
+"mudjeans":{
+  "brand": "Mud Jeans",
+  "overview": "excellent",
+  "rating": 93.75
+},
+"adresse":{
+  "brand": "ADRESSE Paris",
+  "overview": "really good",
+  "rating": 62.75
+},
+"loom":{
+  "brand": "Loom",
+  "overview": "really good",
+  "rating": 67
+}};
