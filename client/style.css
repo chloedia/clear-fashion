@@ -1,6 +1,7 @@
 *{
     letter-spacing:1px;
     text-align: center;
+    overflow-x: hidden;
     
    
 }
@@ -19,7 +20,7 @@ h2{
 #products{
     background-color:#b0daff;
     width: 100%;
-    padding-top: 20px;
+    padding:20px;
     
     
 }
