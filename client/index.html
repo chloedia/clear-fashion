@@ -12,7 +12,7 @@
 <body>
   <div class="head">
     <section>
-      <h1>Clear fashion</h1>
+      <a href='.' style='text-decoration: none;'><h1>Clear fashion</h1></a>
       <h2>Let's buy ethical 🌱</h2>
 
 
@@ -57,14 +57,17 @@
             </input>
           </div>
         </div>
+      </div>
         <div class="row">
           <div id="brand">
-            <label for="brand-select">Choose your brand 🥸 </label>
+            <label for="brand-select">Choose your brand 🥸</label>
             <select name="brand" id="brand-select"> </select>
           </div>
         </div>
 
-      </div>
+    
+
+
       <div class="row">
         <div id="sort">
           <label for="sort-select">Sort:</label>
@@ -84,9 +87,9 @@
   <section id="info-result"></section>
   <section id="products"></section>
   <section id="navigate">
-    <a href="#"><img src='/img/before.png' width="30px"></a>
-    <strong>1</strong>
-    <a href="#"><img src='/img/next.png' width="30px"></a>
+    <button id="before" onclick="beforePage()"><img src='/img/before.png' width="30px"></button>
+    <span id="actualPage"></span>
+    <button id="next" onclick="nextPage()"><img src='/img/next.png' width="30px"></button>
   </section>
   
 

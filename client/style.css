@@ -6,6 +6,7 @@
    
 }
 h1{
+    font-size: 60px;
     padding-top: 30px;
     color:darkblue;
 }
@@ -76,6 +77,10 @@ h2{
 #navigate{
     font-size: 25px;
     overflow-y: hidden;
+}
+#navigate button{
+    background: transparent;
+    border: transparent;   
 }
 
 #navigate strong{

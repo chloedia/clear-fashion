@@ -113,7 +113,7 @@ const renderProducts = products => {
       <div class="row">
       <div class="col">
       <div class="product" id=${product._id}>
-      <img class="product-photo" src=${product.photo}><br>
+      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
         <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
@@ -124,7 +124,7 @@ const renderProducts = products => {
         return `
       <div class="col">
       <div class="product" id=${product._id}>
-        <img class="product-photo" src=${product.photo}><br>
+      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
         <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
@@ -136,7 +136,7 @@ const renderProducts = products => {
         return `
       <div class="col">
       <div class="product" id=${product._id}>
-      <img class="product-photo" src=${product.photo}><br>
+      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
         <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
@@ -150,7 +150,7 @@ const renderProducts = products => {
         <div class="row">
       <div class="col">
       <div class="product" id=${product._id}>
-      <img class="product-photo" src=${product.photo}><br>
+      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
         <span>${product.brand}</span><br>
         <a href="${product.link}" target="_blank">${product.name}</a><br>
         <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
@@ -171,10 +171,25 @@ const renderProducts = products => {
                                 <div class='brand-description'>
                                       <img src='/img/${filters.brand}.png' style='padding:20px; max-width:400px'>
                                       <h2>This brand was rated <strong>${overview}</strong> by clear fashion with a total grade of <strong>${rating}</strong> 😎</h2>
-                                </div><p style='text-align:right; padding:5px;'>Showing ${currentPagination.pageSize} on ${currentPagination.count} results</p>`;
+                                </div><p style='text-align:right; padding:5px;'>Showing ${currentProducts.length} on ${currentPagination.count} results</p>`;
   }else{
-    sectionProducts.innerHTML = `<h2>What you asked for 💅🏽</h2><p style='text-align:right; padding:5px;'>Showing ${currentPagination.pageSize} on ${currentPagination.count} results</p>`;
+    sectionProducts.innerHTML = `<h2>What you asked for 💅🏽</h2><p style='text-align:right; padding:5px;'>Showing ${currentProducts.length} on ${currentPagination.count} results</p>`;
   }
+  document.getElementById("actualPage").innerHTML = `<strong>${currentPagination.currentPage + 1}</strong>`;
+  
+
+  if(currentPagination.currentPage == 0){
+    console.log("Im here");
+    document.getElementById("before").style.visibility = "hidden";
+  }else{
+    document.getElementById("before").style.visibility = "visible";
+  }
+  if(currentPagination.currentPage == currentPagination.pageCount){
+    document.getElementById("next").style.visibility = "hidden";
+  }else{
+    document.getElementById("next").style.visibility = "visible";
+  }
+
   sectionProducts.appendChild(fragment);
 };
 
@@ -495,6 +510,22 @@ async function addFavorite(elmt,id){
     .then(setCurrentProducts)
     .then(() => renderFilter(productsToShow(currentProducts,filters,sorts), currentPagination));
 });
+
+function nextPage(){
+  
+  fetchProducts(currentPagination.currentPage + 1, parseInt(selectShow.value))
+    .then(setCurrentProducts)
+    .then(() => renderFilter(productsToShow(currentProducts,filters,sorts), currentPagination));
+  window.scrollTo(0, 0); 
+}
+
+function beforePage(){
+  
+  fetchProducts(currentPagination.currentPage - 1, parseInt(selectShow.value))
+    .then(setCurrentProducts)
+    .then(() => renderFilter(productsToShow(currentProducts,filters,sorts), currentPagination)); 
+    window.scrollTo(0, 0);
+}
 
 const brands_grades = {
   "dedicated":{
