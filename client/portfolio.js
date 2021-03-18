@@ -10,6 +10,7 @@ let currentPagination = {};
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
+const sectioninfo_result = document.querySelector('#info-result');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts')
 const spanP50 = document.querySelector('#p50');
@@ -65,7 +66,7 @@ const fetchProducts = async (page = 0, size = 12) => {
       if(filters.brand == 'all'){
         const all_fav = {
           "result": Array.from(favorite),
-          "meta": {"currentPage":page,"pageCount":1,"pageSize":favorite.length,"count":favorite.length}
+          "meta": {"currentPage":page,"pageCount":1,"pageSize":Array.from(favorite).length,"count":Array.from(favorite).length}
         }
         return all_fav;
       }else{
@@ -170,9 +171,9 @@ const renderProducts = products => {
                                 <div class='brand-description'>
                                       <img src='/img/${filters.brand}.png' style='padding:20px; max-width:400px'>
                                       <h2>This brand was rated <strong>${overview}</strong> by clear fashion with a total grade of <strong>${rating}</strong> 😎</h2>
-                                </div>`;
+                                </div><p style='text-align:right; padding:5px;'>Showing ${currentPagination.pageSize} on ${currentPagination.count} results</p>`;
   }else{
-    sectionProducts.innerHTML = `<h2>What you asked for 💅🏽</h2>`;
+    sectionProducts.innerHTML = `<h2>What you asked for 💅🏽</h2><p style='text-align:right; padding:5px;'>Showing ${currentPagination.pageSize} on ${currentPagination.count} results</p>`;
   }
   sectionProducts.appendChild(fragment);
 };
@@ -219,7 +220,6 @@ const renderFilter = (products,pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination,products);
-  console.log(products);
 }
 
 /**
@@ -463,7 +463,6 @@ async function addFavorite(elmt,id){
         favorite.delete(prod);
       }
     });
-    console.log(favorite);
     if(filters.favorite){
       fetchProducts(0, parseInt(selectShow.value))
     .then(setCurrentProducts)

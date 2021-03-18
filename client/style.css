@@ -18,10 +18,17 @@ h2{
     line-height: 30px;
 }
 .brand-description{
-    background-color:#f7f7f7;
+    background-color:rgba(250, 255, 255, 0.7);
+}
+.content{
+    background-color:#b0daff;
+    padding-bottom: 20px;
+}
+#info-result{
+    padding-top: 20px;
 }
 #products{
-    background-color:#b0daff;
+    
     width: 100%;
     padding:20px;
     
@@ -62,7 +69,18 @@ h2{
     border-radius: 10px;
     border:3px solid darkblue;
 }
+#indicators{
+    padding-top: 10px;
+}
 
+#navigate{
+    font-size: 25px;
+    overflow-y: hidden;
+}
+
+#navigate strong{
+    padding: 15px;
+}
 .noMatch h2{
     padding-top: 20px;
     font-size: 40px;
@@ -71,4 +89,9 @@ h2{
 .noMatch h3{
     font-size: 20px;
     color: white;
+}
+
+footer{
+    background-color:rgba(250, 255, 255, 0.7);
+    padding: 40px;
 }
