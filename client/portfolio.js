@@ -96,74 +96,40 @@ const fetchProducts = async (page = 0, size = 12) => {
  */
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
+  const container = document.createElement('div');
+  container.className="container";
   const div = document.createElement('div');
+  div.className="row row-cols-auto justify-content-md-center";
   let template;
   let i = 0;
   if (products.length == 0){
     template = `<div class="noMatch" style='padding-top: 5%; padding-bottom: 10%;'><img src="https://media.giphy.com/media/xTiTnr0lQObHdzDeWA/giphy.gif"><h2>Seems like we don't have that here 🥴</h2><h3>Come by later, we are always searching for the best products 👷‍♀️</h3></div>`
   }
   else{
+
   template = products
     .map(product => {
-
-      
-      if(i==0){
-        i+=1;
-        return `
-      <div class="row">
-      <div class="col">
-      <div class="product" id=${product._id}>
-      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
-        <span>${product.brand}</span><br>
-        <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
-      </div>
-      </div>`;}
-    else if(i==products.length - 1){
-      i+=1;
         return `
       <div class="col">
       <div class="product" id=${product._id}>
-      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
-        <span>${product.brand}</span><br>
-        <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
-      </div>
-      </div>`;
-    }
-    else if(i%3 != 0){
-      i+=1;
-        return `
-      <div class="col">
-      <div class="product" id=${product._id}>
-      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
-        <span>${product.brand}</span><br>
-        <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
-      </div>
-      </div>`;
-    }
-    else{
-      i+=1;
-        return `
+      <div class="img_container">
+        <a href="${product.link}" target="_blank">
+          <img class="product-photo" src=${product.photo}></a>
+          <button type="button" id=${favorite_id.has(product._id)?"buttonpressed":"buttonunpressed"} onClick="addFavorite(this,'${product._id}');"></button> 
+          </div>
+        <div class="product-info">
+        <span id="brand">${product.brand}</span>
+        <span id="price">${product.price} €</span>
+        <h2><a href="${product.link}" target="_blank">${product.name}</a></h2>
         </div>
-        <div class="row">
-      <div class="col">
-      <div class="product" id=${product._id}>
-      <a href="${product.link}" target="_blank"><img class="product-photo" src=${product.photo}></a><br>
-        <span>${product.brand}</span><br>
-        <a href="${product.link}" target="_blank">${product.name}</a><br>
-        <span>${product.price} € </span><br><button id="favorite" onclick="addFavorite(this,'${product._id}')">${favorite_id.has(product._id)?'UnFav\'':'Fav\''}</button>
       </div>
       </div>`;
-    }
-      
-      
     })
     .join('');
   }
   div.innerHTML = template;
-  fragment.appendChild(div);
+  container.appendChild(div);
+  fragment.appendChild(container);
   if(filters.brand!='all'){
     const rating = brands_grades[filters.brand].rating;
     const overview = brands_grades[filters.brand].overview;

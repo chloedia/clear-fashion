@@ -87,8 +87,8 @@ async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#pa
     const collection = db.collection('products');
     const result = await collection.insertMany(products,{'ordered': false});
     
-    console.log(result);
-    console.log('done');
+    return result;
+    //console.log('done');
     process.exit(0);
   } catch (e) {
     console.error(e);
@@ -135,5 +135,5 @@ async function askQueries(){
 
 const [,, eshop1,eshop2,eshop3] = process.argv;
 
-sandbox1(eshop1,eshop2,eshop3);
+module.exports= {sandbox1};
 //askQueries();

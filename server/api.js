@@ -2,6 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
 const db = require('./db');
+const fetch =require('./sandbox.js');
 
 const PORT = 8092;
 
@@ -15,19 +16,16 @@ app.use(helmet());
 
 app.options('*', cors());
 
+app.get('/products/fetch',async (req, response) =>{
+  let info = await fetch();
+  response.send(info);
 
+});
 app.get('/products/search', async (req, response) => {
   let res;
   let meta;
-  if(req.query.brand){
-    res = await db.findPage(parseInt(req.query.page),parseInt(req.query.size),{'brand': req.query.brand});
-    meta = await db.getMeta(parseInt(req.query.page),parseInt(req.query.size),{'brand': req.query.brand});
-  }
-  else{
-    res = await db.findPage(parseInt(req.query.page),parseInt(req.query.size));
-    meta = await db.getMeta(parseInt(req.query.page),parseInt(req.query.size));
-  }
-  
+  res = await db.findPage(parseInt(req.query.page),parseInt(req.query.size),brand = req.query.brand,price = parseInt(req.query.price),desc = (req.query.desc)?-1:1,sort = (req.query.sort)?'released':'price');
+  meta = await db.getMeta(parseInt(req.query.page),parseInt(req.query.size),brand = req.query.brand,price = parseInt(req.query.price));
   
   let products = {
     "success" : true,
