@@ -44,17 +44,28 @@ const fetchProducts = async (page = 0, size = 12) => {
     if (!filters.favorite){
       let response;
       console.log("We ask for page "+page);
+      let link = `https://clear-fashion-livid.vercel.app/products/search?page=${page}&size=${size}`;
       
-      if (filters.brand =='all'){
-        response = await fetch(
-          `https://clear-fashion-livid.vercel.app?page=${page}&size=${size}`
-          //`https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
-        );
-      }else{
-        response = await fetch(
-          `https://clear-fashion-livid.vercel.app/products/search?page=${page}&size=${size}&brand=${filters.brand}`
-        );
+      if (filters.brand !='all'){
+        link= link + `&brand=${filters.brand}`;
       }
+      if(filters.reasonablePrice){
+        link= link + `&price=50`;
+      }
+      switch(sorts){
+        case "price-desc":
+          link= link + `&desc=-1`;
+          break;
+        case "date-desc":
+          link= link + `&sort='released`;
+          break;
+        case "date-asc":
+          link= link + `&desc=-1&sort='released`;
+          break;
+      }
+
+      response = await fetch(link);
+       
       const body = await response.json();
 
       if (body.success !== true) {
@@ -360,7 +371,9 @@ filterReleased.addEventListener('change', event => {
 
 filterPrice.addEventListener('change', event => {
   filters.reasonablePrice = !filters.reasonablePrice;
-  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
+  fetchProducts(0, parseInt(selectShow.value))
+    .then(setCurrentProducts)
+    .then(() => renderFilter(productsToShow(currentProducts,filters,sorts), currentPagination));
 });
 
 
@@ -400,7 +413,9 @@ function sortby_date(list,desc){
 
 sortSelect.addEventListener('change', event => {
   sorts = event.target.value;
-  renderFilter(productsToShow(currentProducts,filters,sorts),currentPagination);
+  fetchProducts(0, parseInt(selectShow.value))
+    .then(setCurrentProducts)
+    .then(() => renderFilter(productsToShow(currentProducts,filters,sorts), currentPagination));
 
 });
 
