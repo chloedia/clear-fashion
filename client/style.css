@@ -1,13 +1,48 @@
 *{
     letter-spacing:1px;
-    text-align: center;
     overflow-x: hidden;
     
    
 }
+header{
+    z-index: 2;
+    background-color: white;
+    width: 100%;
+    position: fixed;
+}
+#choices{
+    padding-left : 10%;
+    font-size: 20px;
+}
+#choices button {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 200px;
+    height: 100%;
+    background-color:transparent;
+    border:none;
+    color:darkblue;
+
+}
+
+#choices button:hover {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 200px;
+    height: 100%;
+    color:lightblue;
+    background-color:transparent;
+    border:none;
+
+}
+
+.form-select{
+    width:60px;
+    align-items:center;
+}
 h1{
-    font-size: 60px;
-    padding-top: 30px;
+    font-size: 30px;
+    padding: 20px;
     color:darkblue;
 }
 h2{
@@ -45,6 +80,7 @@ a{
 .content{
     background-color:#b0daff;
     padding-bottom: 20px;
+    text-align: center;
 }
 #info-result{
     padding-top: 20px;
@@ -59,6 +95,8 @@ a{
 }
 .img_container{
     position: relative;
+    width: 300px;
+    height: 300px;
 }
 
 .img_container button{
@@ -94,26 +132,17 @@ a{
     background-color: lightblue;
 }
 .product-photo{
-    max-height: 400px;
-    height:auto;
-    max-width: 400px;
+    height: 100%;
+    width: 100%;
     border-radius: 10px;
-}
-@media screen and (max-width: 450px){   
-    .product-photo{   
-        max-height: 300px;
-        height:auto;
-        max-width: 400px;
-        border-radius: 8px;   
-    } 
+    object-fit:cover;
 }
 @media screen and (max-width: 330px){   
-    .product-photo{   
-        max-height: 250px;
-        height:auto;
-        max-width: 250px;
-        border-radius: 8px;   
-    } 
+    .img_container{
+        position: relative;
+        width: 250px;
+        height: 250px;
+    }
 }
 
 .row{
@@ -121,6 +150,8 @@ a{
    
 }
 .head{
+    padding-top:8%;
+    text-align: center;
     background: repeating-linear-gradient(
     45deg,
     #ffffff,
@@ -137,13 +168,16 @@ a{
     
 }
 #filters{
-    
-    
     margin-left: 30px;
     margin-right: 30px;
     border-radius: 10px;
     border:3px solid darkblue;
 }
+
+#filters span{
+    padding-left: 20px;
+}
+
 #indicators{
     padding-top: 10px;
 }
@@ -171,6 +205,7 @@ a{
 }
 
 footer{
+    text-align: center;
     background-color:rgba(250, 255, 255, 0.7);
     padding: 40px;
 }
