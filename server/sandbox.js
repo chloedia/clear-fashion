@@ -6,7 +6,7 @@ const loom = require('./sources/loom');
 const { MongoClient } = require("mongodb");
 
 const MONGODB_URI =
-  "mongodb+srv://dbChloe:2HQelVgssDbLCR2Z@clearfashion.3knaz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+"mongodb+srv://chloedaems0:M2ZVbOmmdRAzb0Mb@clearfashion.i5mykqs.mongodb.net/?retryWrites=true&w=majority";
 const MONGODB_DB_NAME = 'clearFashion'
 
 async function asyncForEach(array, callback) {
@@ -40,8 +40,8 @@ async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#pa
     dedicatedbrand.fetchProducts().then(ob => products = products.concat(ob));
 
     pages = [
-      'https://www.loom.fr/collections/hauts',
-      'https://www.loom.fr/collections/bas'
+      'https://www.loom.fr/collections/vestiaire-homme',
+      'https://www.loom.fr/collections/vestiaire-femme'
     ];
 
     console.log('\n');
@@ -84,7 +84,7 @@ async function sandbox1 (eshop1 = 'https://www.dedicatedbrand.com/en/men/news#pa
     const db =  client.db(MONGODB_DB_NAME)
 
     //We insert in the mongodb
-    const collection = db.collection('products');
+    const collection = db.collection('Products');
     const result = await collection.insertMany(products,{'ordered': false});
     
     return result;
@@ -135,5 +135,5 @@ async function askQueries(){
 
 const [,, eshop1,eshop2,eshop3] = process.argv;
 
-module.exports= {sandbox1};
+module.exports = sandbox1;
 //askQueries();

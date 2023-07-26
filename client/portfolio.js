@@ -45,7 +45,8 @@ const fetchProducts = async (page = 0, size = 12) => {
       let response;
       console.log("We ask for page "+page);
       let link = `https://clear-fashion-livid.vercel.app/products/search?page=${page}&size=${size}`;
-      
+      //let link = `http://0.0.0.0:8092/products/search?page=${page}&size=${size}`;
+
       if (filters.brand !='all'){
         link= link + `&brand=${filters.brand}`;
       }
@@ -450,6 +451,8 @@ const favorite = new Set();
 
 async function addFavorite(elmt,id){
   const response = await fetch(`https://clear-fashion-livid.vercel.app/products/${id}`);
+  //const response = await fetch(`http://0.0.0.0/products/${id}`);
+
   const body = await response.json();
   if (favorite_id.has(id)){
     console.log("je suis la");
